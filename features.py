@@ -1,22 +1,9 @@
-"""
-features.py
------------
-Shared code for the rainfall project.
-
-Both the training notebook and the Streamlit app import this file.
-This makes sure the features are calculated in EXACTLY the same way
-during training and during inference (prediction).
-If the two ways were different, the model would get wrong inputs.
-"""
-
 import numpy as np
 import pandas as pd
 
-# ------------------------------------------------------------------
 # 1. District codes -> names
 #    The file uses the Department of Census and Statistics order.
 #    (Checked with the n_pixels column: district size matches.)
-# ------------------------------------------------------------------
 DISTRICTS = {
     "LK11": "Colombo",      "LK12": "Gampaha",     "LK13": "Kalutara",
     "LK21": "Kandy",        "LK22": "Matale",      "LK23": "Nuwara Eliya",
@@ -32,12 +19,10 @@ DISTRICTS = {
 # The model needs numbers, so each district code gets a number (0..24).
 DISTRICT_TO_NUM = {code: i for i, code in enumerate(sorted(DISTRICTS))}
 
-# ------------------------------------------------------------------
 # 2. Label (what we predict): rain level of the next dekad
 #    Dry      : rfh <  10 mm   (less than about 1 mm per day)
 #    Moderate : 10 mm <= rfh < 100 mm
 #    Heavy    : rfh >= 100 mm  (about 10 mm or more per day)
-# ------------------------------------------------------------------
 CLASS_NAMES = ["Dry", "Moderate", "Heavy"]
 DRY_LIMIT = 10.0
 HEAVY_LIMIT = 100.0
@@ -49,10 +34,8 @@ def rain_class(rfh):
     return np.where(rfh < DRY_LIMIT, 0, np.where(rfh >= HEAVY_LIMIT, 2, 1))
 
 
-# ------------------------------------------------------------------
 # 3. The features (model inputs). All of them are known BEFORE the
 #    dekad we want to predict, so there is no data leakage.
-# ------------------------------------------------------------------
 FEATURES = [
     "district_num",   # which district (0..24)
     "dekad_of_year",  # 1..36  (which 10-day period of the year)
@@ -104,9 +87,7 @@ def previous_dekad(dek):
     return 36 if dek == 1 else dek - 1
 
 
-# ------------------------------------------------------------------
 # 4. Build ONE feature row from simple user inputs (used by the app)
-# ------------------------------------------------------------------
 def build_feature_row(pcode, target_dekad, rain_t1, rain_t2, rain_t3,
                       rain_3months, normals):
     """

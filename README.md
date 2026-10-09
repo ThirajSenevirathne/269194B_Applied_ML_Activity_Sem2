@@ -32,7 +32,7 @@ CHIRPS satellite rainfall with station data, averaged per district, one row ever
 | `.streamlit/config.toml` | App colour theme |
 | `requirements.txt` | Python libraries (versions match the saved models) |
 
-## How to run the app on your computer
+## How to run the app
 
 Python 3.12 is recommended.
 
@@ -54,10 +54,6 @@ The app opens at http://localhost:8501
 4. The **How well the models performed** section shows test results, confusion matrices,
    feature importance and the tuned settings.
 
-## How to re-train (optional)
-
-Open and run all cells of `rainfall_model_training.ipynb`. It writes new files to `models/`.
-On one CPU, tuning takes about 6 minutes.
 
 ## Method summary
 
